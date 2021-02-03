@@ -1,5 +1,5 @@
 from rest_framework import fields, serializers
-from .models import LANGUAGE_CHOICES, STYLE_CHOICES,Snippet
+from .models import LANGUAGE_CHOICES, STYLE_CHOICES,Snippet,Author,Book
 from django.contrib.auth.models import User
 
 class SnippetSerializer(serializers.HyperlinkedModelSerializer):
@@ -36,3 +36,22 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'username', 'snippets']
+
+class AuthorSerializer(serializers.ModelSerializer):
+    # book_set = serializers.PrimaryKeyRelatedField(read_only=True,many=True)
+    class Meta:
+        model = Author
+        fields=['id','name']
+
+class BookSerializer(serializers.ModelSerializer):
+    author = AuthorSerializer(read_only=True)
+
+    class Meta:
+        model = Book
+        fields='__all__'
+    
+    # def create(self, validated_data):
+    #     author = validated_data.pop('author')
+    #     author = Author.objects.get(id=author)
+    #     book_name = validated_data.pop('name')
+    #     return Book(name=book_name,author = author)

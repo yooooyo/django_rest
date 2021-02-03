@@ -35,3 +35,10 @@ class Snippet(models.Model):
                                 full=True, **options)
         self.highlighted = highlight(self.code, lexer, formatter)
         super(Snippet, self).save(*args, **kwargs)
+
+class Author(models.Model):
+    name = models.CharField(max_length=50)
+
+class Book(models.Model):
+    name = models.CharField(max_length=50)
+    author = models.ForeignKey(Author,on_delete=models.CASCADE)
